@@ -22,9 +22,9 @@ library
                      , text
                      , blaze-svg
                      , colour
-                     , Chart
-                     , Chart-cairo
-                     , Chart-diagrams
+                     --, Chart
+                     --, Chart-cairo
+                     --, Chart-diagrams
                      , vector
                      , statistics-linreg
                      , Decimal
