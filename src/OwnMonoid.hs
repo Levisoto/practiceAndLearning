@@ -5,6 +5,7 @@ import Text.Printf
 data OrderLine
   = ProductLine { productCode :: String, productQuantity :: Int, price :: Float, lineTotal :: Float }
   | TotalLine { totalQuantity :: Int, orderTotal :: Float }
+  | EmptyLine
 
 
 instance Show OrderLine where
@@ -12,6 +13,20 @@ instance Show OrderLine where
     printf "%-10s %5i @%4g each %6g" plCode plQuantity plPrice plTotal
   show (TotalLine tlQuantity tlTotal) =
     printf "%-10s %5i            %6g" "TOTAL" tlQuantity tlTotal
+
+{-|
+class Monoid m where
+  mempty :: m
+  mappend :: m -> m -> m
+  mconcat :: [m] -> m
+  mconcat = foldr mappend mempty
+-}
+
+
+instance Monoid OrderLine where
+  mempty = EmptyLine
+  mappend = addLine
+
 
 sampleLines :: [OrderLine]
 sampleLines =
@@ -28,9 +43,10 @@ moreSampleLines =
     ProductLine { productCode = "EEE", productQuantity = 2, price = 2.00, lineTotal = 4.00 }
   ]
 
+
 addLine :: OrderLine -> OrderLine -> OrderLine
-addLine (ProductLine "" _ _ _) line = line
-addLine line (ProductLine "" _ _ _) = line
+addLine EmptyLine line = line
+addLine line EmptyLine = line
 addLine (ProductLine _ plQuantity _ plTotal) (TotalLine tlQuantity tlTotal) =
   TotalLine {
     totalQuantity = plQuantity + tlQuantity,
@@ -52,18 +68,6 @@ addLine line1 line2 =
     orderTotal = lineTotal line1 + lineTotal line2
   }
 
-emptyLine :: OrderLine
-emptyLine =
-  ProductLine {
-    productCode = "",
-    productQuantity = 0,
-    price = 0,
-    lineTotal = 0
-  }
-
-totalLine :: [OrderLine] -> OrderLine
-totalLine = foldl addLine emptyLine 
-
 firstPrint :: IO ()
 firstPrint = do
   mapM_ print sampleLines
@@ -74,5 +78,5 @@ firstPrint = do
   putStrLn "----------------------------------"
   print bigTotal
   where
-    subtotal = totalLine sampleLines
-    bigTotal = totalLine $ moreSampleLines ++ [subtotal]
+    subtotal = mconcat sampleLines
+    bigTotal = mconcat $ moreSampleLines ++ [subtotal]
