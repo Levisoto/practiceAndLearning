@@ -33,3 +33,7 @@ skips list = [takePosition list x | x <- [1..length list]]
 
 -------------------------------------------------------------------------
 -------------------------------------------------------------------------
+  -- this is only a curiosity I have
+
+sumas :: Integer -> Integer -> Integer
+sumas = (+)

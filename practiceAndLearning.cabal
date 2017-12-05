@@ -18,6 +18,7 @@ library
   exposed-modules:     Lib
                        Lecture
                        LinearRegression
+                       OwnMonoid
   build-depends:       base >= 4.7 && < 5
                      , text
                      , blaze-svg
@@ -34,6 +35,14 @@ library
 executable practiceAndLearning-exe
   hs-source-dirs:      app
   main-is:             Main.hs
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  build-depends:       base
+                     , practiceAndLearning
+  default-language:    Haskell2010
+
+executable fMon
+  hs-source-dirs:      app
+  main-is:             MainMonoid.hs
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
   build-depends:       base
                      , practiceAndLearning

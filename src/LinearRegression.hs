@@ -34,7 +34,7 @@ f x = b0 + b1*x
 g x = ((*b0).sin.(/b1)) x
 
 functionY = do 
-  plot (PNG "myThirdPlot.png") $ [
+  plot X11 $ [
                     Function2D
                     [Title "Linear Regression", Color Red]
                     [Range 0 140] (g)
